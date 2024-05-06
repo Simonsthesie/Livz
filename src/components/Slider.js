@@ -1,150 +1,111 @@
-import React, { useState, useEffect } from "react";
-import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import React, { useState, useEffect, useRef } from 'react';
 import { Carousel } from 'react-responsive-carousel';
-import "./Slider.css";
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import './Slider.css';
 
 function Slider() {
-    const baseUrl = "http://react-responsive-carousel.js.org/assets/";
+    const baseUrl = 'http://react-responsive-carousel.js.org/assets/';
     const datas = [
-        {
-            id: 1,
-            image: `${baseUrl}1.jpeg`,
-            title: 'Titre du slider1',
-            text: 'Lorem',
-        },
-        {
-            id: 2,
-            image: `${baseUrl}2.jpeg`,
-            title: 'Titre du slider 2',
-            text: 'Lorem',
-        },
-        {
-            id: 3,
-            image: `${baseUrl}3.jpeg`,
-            title: 'Titre du slider 3',
-            text: 'Lorem',
-        },
-        {
-            id: 4,
-            image: `${baseUrl}4.jpeg`,
-            title: 'Titre du slider 4',
-            text: 'Lorem',
-        },
-        {
-            id: 5,
-            image: `${baseUrl}5.jpeg`,
-            title: 'Titre du slider 5',
-            text: 'Lorem',
-        },
-        {
-            id: 6,
-            image: `${baseUrl}6.jpeg`,
-            title: 'Titre du slider 6',
-            text: 'Lorem',
-        },
-        {
-            id: 7,
-            image: `${baseUrl}7.jpeg`,
-            title: 'Titre du slider 7',
-            text: 'Lorem',
-        },
-
+        { id: 1, image: `${baseUrl}1.jpeg`, title: 'Titre du slider1', text: 'Lorem' },
+        { id: 2, image: `${baseUrl}2.jpeg`, title: 'Titre du slider 2', text: 'Lorem' },
+        { id: 3, image: `${baseUrl}3.jpeg`, title: 'Titre du slider 3', text: 'Lorem' },
+        { id: 4, image: `${baseUrl}4.jpeg`, title: 'Titre du slider 4', text: 'Lorem' },
+        { id: 5, image: `${baseUrl}5.jpeg`, title: 'Titre du slider 5', text: 'Lorem' },
+        { id: 6, image: `${baseUrl}6.jpeg`, title: 'Titre du slider 6', text: 'Lorem' },
+        { id: 7, image: `${baseUrl}7.jpeg`, title: 'Titre du slider 7', text: 'Lorem' }
     ];
 
     const [selectedPhotos, setSelectedPhotos] = useState([]);
     const [isFullScreen, setIsFullScreen] = useState(false);
-    
-    useEffect(() => {
-        // Sélection automatique de la première image
-        setSelectedPhotos([datas[0].id]);
-    }, []); // La dépendance vide assure que cela ne se déclenche qu'une seule fois
+    const carouselRef = useRef(null);
 
+    useEffect(() => {
+        const handleFullScreenChange = () => {
+            const isFs = !!document.fullscreenElement;
+            setIsFullScreen(isFs);
+        };
+    
+        document.addEventListener('fullscreenchange', handleFullScreenChange);
+        return () => document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    }, []);
+    
+    const handleSelectionChange = (event, id) => {
+        setSelectedPhotos(
+            event.target.checked
+            ? [...selectedPhotos, id]
+            : selectedPhotos.filter(photoId => photoId !== id)
+        );
+    };
 
     const toggleFullScreen = () => {
-        const elem = document.documentElement;
-        if (!isFullScreen) {
+        const elem = carouselRef.current;
+        if (!document.fullscreenElement) {
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
-            } else if (elem.mozRequestFullScreen) { /* Firefox */
+            } else if (elem.mozRequestFullScreen) {
                 elem.mozRequestFullScreen();
-            } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+            } else if (elem.webkitRequestFullscreen) {
                 elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE/Edge */
+            } else if (elem.msRequestFullscreen) {
                 elem.msRequestFullscreen();
             }
         } else {
             if (document.exitFullscreen) {
                 document.exitFullscreen();
-            } else if (document.mozCancelFullScreen) { /* Firefox */
+            } else if (document.mozCancelFullScreen) {
                 document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) { /* Chrome, Safari and Opera */
+            } else if (document.webkitExitFullscreen) {
                 document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) { /* IE/Edge */
+            } else if (document.msExitFullscreen) {
                 document.msExitFullscreen();
             }
         }
         setIsFullScreen(!isFullScreen);
     };
-
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-            if (event.key === "Escape") {
-                setIsFullScreen(false);
-            }
-        };
-
-        document.addEventListener("keydown", handleKeyDown);
-
-        return () => {
-            document.removeEventListener("keydown", handleKeyDown);
-        };
-    }, []);
-
-    const handleChange = (event, id) => {
-        const isChecked = event.target.checked;
-        if (isChecked) {
-            setSelectedPhotos([...selectedPhotos, id]); // Ajouter l'image à la liste des images sélectionnées
-        } else {
-            setSelectedPhotos(selectedPhotos.filter(photoId => photoId !== id)); // Retirer l'image de la liste des images sélectionnées
-        }
-    };
+    
+    
 
     return (
-        <div className={`slider-container ${isFullScreen ? 'fullscreen' : ''}`}>
-            <Carousel
-                autoPlay interval={3000} infiniteLoop thumbWidth={120} showIndicators={false} showStatus={false}
-                className={isFullScreen ? 'fullscreen' : ''}
-            >
-                {selectedPhotos.map(id => {
-                    const photo = datas.find(item => item.id === id);
-                    return (
-                        <div key={photo.id}>
-                            <img src={photo.image} alt=""/>
-                            <div className="overlay">
-                                <h2 className="overlay__title">{photo.title}</h2>
-                                <p className="overlay__text">{photo.text}</p>
-                            </div>
-                        </div>
-                    );
-                })}
-            </Carousel>
-            <button className="fullscreen-button" onClick={toggleFullScreen}>
-                {isFullScreen ? 'Quitter plein écran' : 'Plein écran'}
-            </button>
-            
+        <div className="slider-container">
             <div className="photo-container">
-                {datas.map(slide => (
-                    <div key={slide.id} className="photo-item">
-                        <img src={slide.image} alt="" className="photo-image"/>
+                {datas.map(photo => (
+                    <div key={photo.id} className="photo-item">
+                        <img src={photo.image} alt={photo.title} className="photo-image" />
                         <label className="photo-label">
                             <input
                                 type="checkbox"
-                                checked={selectedPhotos.includes(slide.id)}
-                                onChange={(event) => handleChange(event, slide.id)}
-                            />
+                                checked={selectedPhotos.includes(photo.id)}
+                                onChange={(event) => handleSelectionChange(event, photo.id)}
+                            /> Sélectionner
                         </label>
                     </div>
                 ))}
+            </div>
+            {selectedPhotos.length > 0 && (
+                <button className="launch-fullscreen-button" onClick={toggleFullScreen}>
+                    {isFullScreen ? 'Quitter plein écran' : 'Lancer le diaporama en plein écran'}
+                </button>
+            )}
+            <div ref={carouselRef} className="carousel-container">
+                <Carousel
+                    autoPlay
+                    interval={3000}
+                    infiniteLoop
+                    showIndicators={false}
+                    showThumbs={false}
+                    showStatus={false}
+                    className={isFullScreen ? 'fullscreen' : ''}
+                >
+                    {selectedPhotos.map(id => {
+                        const photo = datas.find(item => item.id === id);
+                        return (
+                            <div key={photo.id}>
+                                <img src={photo.image} alt={photo.title} />
+                                <p className="legend">{photo.title}</p>
+                            </div>
+                        );
+                    })}
+                </Carousel>
             </div>
         </div>
     );

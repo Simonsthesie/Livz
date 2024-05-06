@@ -1,112 +1,104 @@
-/* Styles pour le carrousel */
-.carousel {
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.carousel .thumbs {
-    display: flex;
-    justify-content: center;
-    margin: 0;
-    padding: 10px;
-}
-
-.carousel .thumb {
-    cursor: pointer;
-    margin: 5px;
-}
-
-.carousel .overlay {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding: 20px;
-    background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
-    color: #fff;
-}
-
-.carousel .overlay__title {
-    margin: 0;
-    font-size: 24px;
-    font-weight: bold;
-}
-
-.carousel .overlay__text {
-    font-size: 18px;
-    margin-top: 10px;
-}
-
-/* Styles pour le conteneur du carrousel */
+/* Base Styles */
 .slider-container {
-    position: relative;
+    font-family: 'Arial', sans-serif; /* Utilisation d'une police standard pour la cohérence */
+    text-align: center;
+    padding: 20px;
+    max-width: 1200px; /* Limite la largeur maximale pour une meilleure gestion de l'espace */
+    margin: auto; /* Centrage du conteneur */
 }
 
-/* Styles pour le mode plein écran */
-.fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-}
-
-.fullscreen .carousel-root {
-    width: 100%;
-    height: 100%;
-}
-
-.fullscreen .carousel {
-    width: 100%;
-    height: 100%;
-}
-
-/* Styles pour la grille de photos */
+/* Grid layout pour les images */
 .photo-container {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Crée une grille responsive */
+    gap: 10px; /* Espace entre les photos */
+    margin-top: 20px;
 }
 
+/* Styles pour les éléments individuels de la photo */
 .photo-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-.photo-label {
-    margin-top: 10px;
-    font-weight: bold;
-    color: #333;
+    border: 1px solid #ccc; /* Bordure légère pour chaque élément photo */
+    border-radius: 8px; /* Bordures arrondies pour les images */
+    overflow: hidden; /* Masque les débordements, utile pour les images */
 }
 
 .photo-image {
     width: 100%;
-    height: auto;
-    object-fit: cover;
-    border-radius: 10px 10px 0 0;
+    height: auto; /* Hauteur automatique pour maintenir l'aspect ratio */
+    transition: transform 0.3s ease-in-out; /* Transition pour l'effet de zoom */
 }
 
-/* Styles pour le bouton Plein écran */
-.fullscreen-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
+.photo-item:hover .photo-image {
+    transform: scale(1.05); /* Effet de zoom léger au survol */
+}
+
+.photo-label {
+    padding: 8px;
+    background-color: rgba(0, 0, 0, 0.75); /* Fond semi-transparent */
+    color: white;
+    font-size: 14px;
+    text-align: center; /* Centrage du texte */
+}
+
+input[type="checkbox"] {
+    cursor: pointer; /* Indique que le checkbox est cliquable */
+}
+
+/* Boutons */
+.start-selection-button, .launch-fullscreen-button {
     padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
+    background-color: #007bff; /* Bleu vibrant pour le bouton */
+    color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    margin: 20px 0;
     transition: background-color 0.3s ease;
 }
 
-.fullscreen-button:hover {
-    background-color: #0056b3;
+.start-selection-button:hover, .launch-fullscreen-button:hover {
+    background-color: #0056b3; /* Assombrissement du bouton au survol */
+}
+
+/* Styles spécifiques au plein écran */
+.fullscreen .carousel-container {
+    position: fixed; /* Fixe le conteneur sur tout l'écran */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw; /* Utilise toute la largeur de la fenêtre */
+    height: 100vh; /* Utilise toute la hauteur de la fenêtre */
+    display: flex; /* Flexbox pour centrer le contenu */
+    align-items: center;
+    justify-content: center;
+    background-color: black; /* Fond noir pour améliorer l'affichage des images */
+    z-index: 9999; /* S'assure que le conteneur est au-dessus des autres éléments */
+}
+
+.carousel .slide {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.carousel .slide img {
+    max-width: 100%; /* Les images ne dépassent pas leur conteneur */
+    max-height: 100%;
+    object-fit: contain; /* Garantit que les images ne sont pas déformées */
+}
+
+@media (max-width: 768px) {
+    /* Adaptations pour les petits écrans */
+    .photo-container {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+
+    .start-selection-button, .launch-fullscreen-button {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
 }
