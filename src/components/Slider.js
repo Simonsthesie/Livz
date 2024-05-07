@@ -18,7 +18,43 @@ function Slider() {
     const [selectedPhotos, setSelectedPhotos] = useState([]);
     const [showCarousel, setShowCarousel] = useState(false);
     const carouselRef = useRef(null);
+    
+    const adjustImageSize = () => {
+        const slides = document.querySelectorAll('.carousel .slide img');
+        slides.forEach(img => {
+            const slide = img.closest('.slide');
+            const slideHeight = slide.clientHeight;
+            const slideWidth = slide.clientWidth;
+            const imgHeight = img.naturalHeight;
+            const imgWidth = img.naturalWidth;
+            const imgRatio = imgWidth / imgHeight;
+            const slideRatio = slideWidth / slideHeight;
 
+            if (imgRatio > slideRatio) {
+                img.style.width = '100%';
+                img.style.height = 'auto';
+            } else {
+                img.style.height = '100%';
+                img.style.width = 'auto';
+            }
+        });
+    };
+
+    useEffect(() => {
+        const handleResize = () => {
+            adjustImageSize();
+        };
+
+        if (showCarousel) {
+            adjustImageSize();
+            window.addEventListener('resize', handleResize);
+        }
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, [showCarousel]); 
+    
     const handleSelectPhoto = (id) => {
         const isAlreadySelected = selectedPhotos.includes(id);
         setSelectedPhotos(isAlreadySelected ? selectedPhotos.filter(photoId => photoId !== id) : [...selectedPhotos, id]);
@@ -90,11 +126,14 @@ function Slider() {
                 <>
             <Carousel
                 autoPlay
-                interval={3000}
+                interval={4000}  // Basculer toutes les 4 secondes
                 infiniteLoop
                 showIndicators={false}
                 showThumbs={false}
                 showStatus={false}
+                useKeyboardArrows
+                transitionTime={1000}  // Durée de la transition, vous pouvez ajuster selon vos besoins
+                emulateTouch  // Permettre la navigation tactile sur mobile
             >
                 {selectedPhotos.map(id => {
                     const photo = initialData.find(item => item.id === id);
