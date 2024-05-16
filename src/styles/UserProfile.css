@@ -1,0 +1,133 @@
+:root {
+  --primary-color: #007bff;
+  --hover-color: #0056b3;
+  --bg-color: #2c2c2c;
+  --text-color: #ffffff;
+  --border-radius: 8px;
+  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  --font-size: 0.9em; /* Taille de police par défaut pour les paragraphes */
+}
+
+.user-profile {
+  background: var(--bg-color);
+  padding: 20px;
+  color: var(--text-color);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  height: calc(100% - 40px);
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.user-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--primary-color);
+}
+
+.user-profile h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: var(--text-color);
+}
+
+.user-info {
+  width: 100%;
+  background-color: #3a3a3a;
+  padding: 15px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+.user-info:hover {
+  background-color: #444;
+}
+
+.user-info p {
+  margin: 10px 0;
+  font-size: var(--font-size);
+  display: flex;
+  align-items: center;
+  color: var(--text-color);
+  overflow: hidden; /* Ajouté pour gérer le débordement */
+  text-overflow: ellipsis; /* Ajouté pour ajouter des points de suspension (...) au texte débordant */
+  white-space: nowrap; /* Ajouté pour empêcher le texte de s'étendre sur plusieurs lignes */
+}
+
+.user-info p i {
+  margin-right: 10px;
+  color: var(--primary-color);
+  font-size: 1.2em;
+}
+
+/* Styles responsives */
+@media (max-width: 768px) {
+  .user-profile {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 15px;
+    border-radius: 0;
+    box-shadow: none;
+    margin-bottom: 20px;
+  }
+
+  .user-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .user-profile h2 {
+    font-size: 1.3em;
+  }
+
+  .user-info {
+    padding: 10px;
+  }
+
+  .user-info p {
+    font-size: 0.8em;
+  }
+
+  .user-info p i {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-profile {
+    padding: 10px;
+  }
+
+  .user-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .user-profile h2 {
+    font-size: 1.2em;
+  }
+
+  .user-info {
+    padding: 8px;
+  }
+
+  .user-info p {
+    font-size: 0.7em;
+  }
+
+  .user-info p i {
+    font-size: 0.9em;
+  }
+}

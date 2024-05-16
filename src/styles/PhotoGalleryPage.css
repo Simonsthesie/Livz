@@ -1,0 +1,145 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background: var(--container-bg);
+  box-shadow: var(--box-shadow);
+  border-radius: 8px;
+  margin-top: 50px;
+}
+
+.photo-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.photo-day-group {
+  margin-bottom: 20px;
+}
+
+.photo-date {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #fff;
+}
+
+.photos-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.photo-container {
+  position: relative;
+  text-align: center;
+  flex: 1 1 calc(25% - 10px); /* Ajustez ceci pour contrôler le nombre de photos par ligne */
+  min-width: 200px; /* Ajustez la largeur minimale */
+  max-width: 250px; /* Ajustez la largeur maximale */
+}
+
+.photo {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.3s;
+  cursor: pointer; /* Ajout du curseur pointeur */
+}
+
+.photo:hover {
+  transform: scale(1.05);
+}
+
+.photo-checkbox {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  transform: scale(1.5);
+}
+
+/* Styles responsives */
+@media (max-width: 768px) {
+  .photo-container {
+    flex: 1 1 calc(50% - 10px); /* Deux photos par ligne sur les tablettes */
+  }
+
+  .photo-date {
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 480px) {
+  .photo-container {
+    flex: 1 1 100%; /* Une photo par ligne sur les petits écrans */
+  }
+
+  .photo-date {
+    font-size: 0.8em;
+  }
+}
+
+/* Styles pour la modal */
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.modal-content {
+  max-width: 80%;
+  max-height: 80%;
+  margin: auto;
+  display: block;
+}
+
+.modal-close {
+  position: absolute;
+  top: 20px;
+  right: 35px;
+  color: #fff;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+  cursor: pointer;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+  color: #bbb;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal-prev, .modal-next {
+  position: absolute;
+  top: 50%;
+  color: white;
+  font-size: 40px;
+  font-weight: bold;
+  transition: 0.3s;
+  cursor: pointer;
+  user-select: none;
+}
+
+.modal-prev:hover, .modal-next:hover {
+  color: #bbb;
+}
+
+.modal-prev {
+  left: 10px;
+}
+
+.modal-next {
+  right: 10px;
+}
