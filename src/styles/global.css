@@ -31,6 +31,7 @@ body {
   margin-top: 50px;
 }
 
+/* Loader Styles */
 .loader-container {
   display: flex;
   justify-content: center;
@@ -45,6 +46,7 @@ h1 {
   margin-bottom: 20px;
 }
 
+/* Form Styles */
 .form {
   display: flex;
   flex-direction: column;
@@ -112,7 +114,7 @@ h1 {
 }
 
 .event-thumbnail {
-  width: 250px;
+  width: 200px;
   height: 150px;
   object-fit: cover;
   transition: transform 0.3s;
@@ -287,10 +289,9 @@ input[type="number"] {
 }
 
 /* Responsive Styles */
-@media (max-width: 768px) {
+@media (max-width: 1200px) {
   .container {
     padding: 15px;
-    margin-left: 0;
   }
 
   .event-item {
@@ -319,7 +320,7 @@ input[type="number"] {
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .container {
     padding: 10px;
   }
@@ -334,5 +335,23 @@ input[type="number"] {
 
   .event-status {
     font-size: 0.7em;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 5px;
+  }
+
+  .event-info h2 {
+    font-size: 0.9em;
+  }
+
+  .event-info p {
+    font-size: 0.7em;
+  }
+
+  .event-status {
+    font-size: 0.6em;
   }
 }

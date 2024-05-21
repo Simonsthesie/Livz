@@ -1,95 +1,96 @@
-:root {
-  --primary-color: #007bff;
-  --hover-color: #0056b3;
-  --bg-color: #2c2c2c;
-  --text-color: #ffffff;
-  --border-radius: 8px;
-  --box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  --font-size: 0.9em; /* Taille de police par défaut pour les paragraphes */
-}
-
 .user-profile {
-  background: var(--bg-color);
+  background: #2c2c2c;
   padding: 20px;
-  color: var(--text-color);
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
   position: fixed;
-  top: 20px;
-  left: 20px;
-  height: calc(100% - 40px);
+  top: 20px; /* Ajout de l'espace en haut */
+  left: 20px; /* Ajout de l'espace à gauche */
+  height: calc(100% - 40px); /* Ajustement de la hauteur pour l'espace en haut et en bas */
   width: 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
   gap: 15px;
   box-sizing: border-box;
-  overflow-y: auto;
 }
 
 .user-avatar {
   width: 100px;
   height: 100px;
   border-radius: 50%;
+  margin-bottom: 20px;
   object-fit: cover;
-  border: 2px solid var(--primary-color);
+  border: 2px solid #007bff; /* Ajout d'une bordure autour de l'avatar */
 }
 
 .user-profile h2 {
   margin: 0;
-  font-size: 1.5em;
-  color: var(--text-color);
+  font-size: 1.8em;
+  margin-bottom: 10px;
+  color: #f0f0f0;
+  text-align: center;
 }
 
 .user-info {
+  text-align: left;
   width: 100%;
-  background-color: #3a3a3a;
   padding: 15px;
-  border-radius: var(--border-radius);
+  background-color: #3a3a3a;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   transition: background-color 0.3s ease;
 }
 
 .user-info:hover {
-  background-color: #444;
+  background-color: #444444; /* Changement de couleur au survol */
 }
 
 .user-info p {
   margin: 10px 0;
-  font-size: var(--font-size);
   display: flex;
   align-items: center;
-  color: var(--text-color);
-  overflow: hidden; /* Ajouté pour gérer le débordement */
-  text-overflow: ellipsis; /* Ajouté pour ajouter des points de suspension (...) au texte débordant */
-  white-space: nowrap; /* Ajouté pour empêcher le texte de s'étendre sur plusieurs lignes */
+  font-size: 0.9em; /* Réduit la taille de la police */
 }
 
 .user-info p i {
   margin-right: 10px;
-  color: var(--primary-color);
-  font-size: 1.2em;
+  color: #007bff;
+  font-size: 1.2em; /* Agrandissement des icônes */
 }
 
-/* Styles responsives */
-@media (max-width: 768px) {
+.user-info p:hover {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.user-info p:hover i {
+  color: #0056b3;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 1200px) {
   .user-profile {
     position: relative;
     width: 100%;
     height: auto;
+    top: 0;
+    left: 0;
     padding: 15px;
     border-radius: 0;
     box-shadow: none;
-    margin-bottom: 20px;
   }
 
   .user-avatar {
     width: 80px;
     height: 80px;
+    margin-bottom: 10px;
   }
 
   .user-profile h2 {
-    font-size: 1.3em;
+    font-size: 1.5em;
   }
 
   .user-info {
@@ -105,7 +106,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
   .user-profile {
     padding: 10px;
   }

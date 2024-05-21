@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { format, isValid } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -7,6 +7,7 @@ import '../styles/PhotoGalleryPage.css';
 
 const PhotoGalleryPage = () => {
   const { eventId } = useParams();
+  const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const [interval, setInterval] = useState(3); // Interval in seconds
@@ -24,7 +25,6 @@ const PhotoGalleryPage = () => {
             'Authorization': `Bearer ${authToken}`
           }
         });
-        console.log(response.data.result); // Log the JSON data
         setPhotos(response.data.result);
       } catch (error) {
         console.error('Error fetching photos', error);
@@ -120,6 +120,7 @@ const PhotoGalleryPage = () => {
 
   return (
     <div className="container">
+      <button className="btn back-btn" onClick={() => navigate(-1)}>Revenir à la page précédente</button>
       <h2>Photos de l'événement {eventId}</h2>
       <div className="photo-gallery">
         {Object.keys(groupedPhotos).map(dateKey => {
