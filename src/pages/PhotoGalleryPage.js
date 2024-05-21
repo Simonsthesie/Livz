@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { format, isValid } from 'date-fns';
 import { fr } from 'date-fns/locale';
@@ -7,7 +7,7 @@ import '../styles/PhotoGalleryPage.css';
 
 const PhotoGalleryPage = () => {
   const { eventId } = useParams();
-  const navigate = useNavigate();
+  const history = useHistory();
   const [photos, setPhotos] = useState([]);
   const [selectedPhotos, setSelectedPhotos] = useState([]);
   const [interval, setInterval] = useState(3); // Interval in seconds
@@ -120,7 +120,7 @@ const PhotoGalleryPage = () => {
 
   return (
     <div className="container">
-      <button className="btn back-btn" onClick={() => navigate(-1)}>Revenir à la page précédente</button>
+      <button className="btn btn-back" onClick={() => history.goBack()}>Back to previous page</button>
       <h2>Photos de l'événement {eventId}</h2>
       <div className="photo-gallery">
         {Object.keys(groupedPhotos).map(dateKey => {
