@@ -1,0 +1,239 @@
+/* src/styles/Slideshow.css */
+
+/* Container for the entire slideshow */
+.slideshow-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* Container for photo selection */
+.photo-selection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 90%;
+  margin: 20px 0;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* Individual photo container */
+.photo-container {
+  margin: 10px;
+  width: 120px;
+  height: 120px;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease, filter 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.photo-container:hover {
+  transform: scale(1.05);
+  filter: brightness(0.8);
+}
+
+/* Photo within the container */
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Label for selected photos */
+.selected-label {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: #007bff;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 0.8em;
+}
+
+/* Container for the actual slideshow */
+.slideshow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  position: relative;
+}
+
+/* Styling for slideshow photos */
+.slideshow-photo {
+  max-width: 90%;
+  max-height: 80%;
+  border-radius: 10px;
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+}
+
+/* Fade effect for photos */
+.fade {
+  opacity: 0;
+  animation: fadeEffect 1s forwards;
+}
+
+@keyframes fadeEffect {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide effect for photos */
+.slide {
+  transform: translateX(-100%);
+  animation: slideEffect 1s forwards;
+}
+
+@keyframes slideEffect {
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Buttons for navigating the slideshow */
+.slideshow-btn {
+  margin: 10px;
+  padding: 10px 20px;
+  cursor: pointer;
+  color: white;
+  background-color: #333;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.slideshow-btn:hover {
+  background-color: #555;
+}
+
+/* Close button for the slideshow */
+.slideshow-close-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.slideshow-close-btn:hover {
+  background-color: darkred;
+}
+
+/* Options for customizing the slideshow */
+.slideshow-options {
+  margin: 20px 0;
+  text-align: center;
+  width: 100%;
+}
+
+.slideshow-options label {
+  margin-right: 10px;
+  color: white;
+  font-size: 1.1em;
+}
+
+.slideshow-options input,
+.slideshow-options select {
+  margin: 5px;
+  padding: 5px;
+  font-size: 1em;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.btn-options,
+.btn {
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-options:hover,
+.btn:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  /* Adjustments for tablet and small screens */
+  .photo-container {
+    width: 100px;
+    height: 100px;
+  }
+
+  .slideshow-options input,
+  .slideshow-options select {
+    width: 100%;
+  }
+
+  .slideshow-btn {
+    padding: 8px 16px;
+  }
+
+  .slideshow-close-btn {
+    padding: 8px;
+    font-size: 18px;
+  }
+
+  .slideshow-photo {
+    max-width: 100%;
+    max-height: 70%;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Adjustments for mobile screens */
+  .photo-container {
+    width: 80px;
+    height: 80px;
+  }
+
+  .slideshow-btn {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .slideshow-close-btn {
+    padding: 6px;
+    font-size: 16px;
+  }
+
+  .slideshow-photo {
+    max-width: 100%;
+    max-height: 60%;
+  }
+
+  .slideshow-options {
+    padding: 10px;
+  }
+}

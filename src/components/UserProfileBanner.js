@@ -3,10 +3,15 @@ import React from 'react';
 import '../styles/UserProfileBanner.css';
 
 const UserProfileBanner = ({ username, selfieUrl }) => {
+  const displayName = username ? username : 'participant(e) de l\'événement';
   return (
     <div className="user-profile-banner">
-      <img src={selfieUrl} alt={`${username}'s profile`} className="profile-image" />
-      <span className="username">{username}</span>
+      {selfieUrl ? (
+        <img src={selfieUrl} alt={`${displayName}'s profile`} className="profile-image" />
+      ) : (
+        <i className="fas fa-user profile-placeholder"></i>
+      )}
+      <span className="username">{displayName}</span>
     </div>
   );
 };

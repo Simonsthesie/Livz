@@ -46,8 +46,8 @@
 .photo-container {
   margin: 5px;
   position: relative;
-  width: 125px;
-  height: 125px;
+  width: 120px;
+  height: 120px;
   box-sizing: border-box;
   border-radius: 10px;
   overflow: hidden;
@@ -222,8 +222,8 @@
 }
 
 .thumbnail {
-  width: 100px;
-  height: 75px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
   margin: 5px;
   cursor: pointer;
@@ -239,28 +239,17 @@
   border: 2px solid #fff;
 }
 
-.thumbnail-nav {
-  background-color: transparent;
-  border: none;
-  color: #fff;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 10px;
-}
-
-.thumbnail-nav:hover {
-  color: #007bff;
-}
-
 @media (max-width: 768px) {
   .photo-container {
-    flex: 1 1 calc(50% - 10px);
-    max-width: calc(50% - 10px);
+    flex: 1 1 calc(33.33% - 10px);
+    max-width: calc(33.33% - 10px);
+    width: 120px;
+    height: 120px;
   }
 
   .photo {
-    width: 100%;
-    height: auto;
+    width: 120px;
+    height: 120px;
   }
 
   .modal-content-container {
@@ -291,13 +280,15 @@
 
 @media (max-width: 480px) {
   .photo-container {
-    flex: 1 1 100%;
-    max-width: 100%;
+    flex: 1 1 calc(50% - 10px);
+    max-width: calc(50% - 10px);
+    width: 120px;
+    height: 120px;
   }
 
   .photo {
-    width: 100%;
-    height: auto;
+    width: 120px;
+    height: 120px;
   }
 
   .user-profile-banner {
@@ -310,8 +301,8 @@
   }
 
   .thumbnail {
-    width: 60px;
-    height: 45px;
+    width: 120px;
+    height: 120px;
   }
 
   .modal-prev,

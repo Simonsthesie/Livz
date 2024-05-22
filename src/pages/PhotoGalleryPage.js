@@ -1,9 +1,11 @@
+// src/components/PhotoGalleryPage.js
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { format, isValid } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import UserProfileBanner from '../components/UserProfileBanner';
+import Slideshow from '../components/Slideshow';
 import '../styles/PhotoGalleryPage.css';
 
 const PhotoGalleryPage = () => {
@@ -13,8 +15,9 @@ const PhotoGalleryPage = () => {
   const [modalPhotoIndex, setModalPhotoIndex] = useState(null);
   const authToken = localStorage.getItem('authToken');
   const [currentUser, setCurrentUser] = useState({ username: '', selfieUrl: '' });
-  const [currentThumbnailPage, setCurrentThumbnailPage] = useState(0);
-  const thumbnailsPerPage = 10;
+  const [showSlideshow, setShowSlideshow] = useState(false);
+  const [selectedPhotos, setSelectedPhotos] = useState([]);
+  const thumbnailsPerPage = 5;
 
   useEffect(() => {
     const fetchAllPhotos = async () => {
@@ -79,7 +82,11 @@ const PhotoGalleryPage = () => {
     const photo = flatPhotosArray[index];
     setModalPhotoIndex(index);
     setCurrentUser({ username: photo.username, selfieUrl: photo.selfieUrl });
-    setCurrentThumbnailPage(0);  // Reset to the first page of thumbnails
+  };
+
+  const handleSlideshowClick = () => {
+    setShowSlideshow(true);
+    setSelectedPhotos(flatPhotosArray);
   };
 
   useEffect(() => {
@@ -95,12 +102,24 @@ const PhotoGalleryPage = () => {
 
   const showPrevPhoto = (e) => {
     e.stopPropagation();
-    setModalPhotoIndex((prevIndex) => (prevIndex - 1 + flatPhotosArray.length) % flatPhotosArray.length);
+    setModalPhotoIndex((prevIndex) => {
+      const newIndex = (prevIndex - 1 + flatPhotosArray.length) % flatPhotosArray.length;
+      if (newIndex % thumbnailsPerPage === thumbnailsPerPage - 1) {
+        setCurrentThumbnailPage(Math.floor(newIndex / thumbnailsPerPage));
+      }
+      return newIndex;
+    });
   };
 
   const showNextPhoto = (e) => {
     e.stopPropagation();
-    setModalPhotoIndex((prevIndex) => (prevIndex + 1) % flatPhotosArray.length);
+    setModalPhotoIndex((prevIndex) => {
+      const newIndex = (prevIndex + 1) % flatPhotosArray.length;
+      if (newIndex % thumbnailsPerPage === 0) {
+        setCurrentThumbnailPage(Math.floor(newIndex / thumbnailsPerPage));
+      }
+      return newIndex;
+    });
   };
 
   const handleThumbnailClick = (index, e) => {
@@ -108,17 +127,7 @@ const PhotoGalleryPage = () => {
     setModalPhotoIndex(index);
   };
 
-  const handleNextThumbnailPage = () => {
-    if ((currentThumbnailPage + 1) * thumbnailsPerPage < flatPhotosArray.length) {
-      setCurrentThumbnailPage(currentThumbnailPage + 1);
-    }
-  };
-
-  const handlePrevThumbnailPage = () => {
-    if (currentThumbnailPage > 0) {
-      setCurrentThumbnailPage(currentThumbnailPage - 1);
-    }
-  };
+  const [currentThumbnailPage, setCurrentThumbnailPage] = useState(0);
 
   const displayedThumbnails = flatPhotosArray.slice(
     currentThumbnailPage * thumbnailsPerPage,
@@ -131,6 +140,7 @@ const PhotoGalleryPage = () => {
         <i className="fas fa-arrow-left"></i> Retour
       </button>
       <h2>Photos de l'événement {eventId}</h2>
+      <i className="fas fa-play slideshow-icon" onClick={handleSlideshowClick}></i>
       <div className="photo-gallery">
         {Object.keys(groupedPhotos).map(dateKey => {
           const datePhotos = groupedPhotos[dateKey];
@@ -163,7 +173,6 @@ const PhotoGalleryPage = () => {
             </div>
             <button className="modal-next" onClick={showNextPhoto}>&#10095;</button>
             <div className="thumbnail-gallery">
-              <button className="thumbnail-nav prev" onClick={handlePrevThumbnailPage}>&#10094;</button>
               {displayedThumbnails.map((photo, index) => (
                 <img
                   key={index}
@@ -173,11 +182,11 @@ const PhotoGalleryPage = () => {
                   onClick={(e) => handleThumbnailClick(flatPhotosArray.indexOf(photo), e)}
                 />
               ))}
-              <button className="thumbnail-nav next" onClick={handleNextThumbnailPage}>&#10095;</button>
             </div>
           </div>
         </>
       )}
+      {showSlideshow && <Slideshow photos={selectedPhotos} onClose={() => setShowSlideshow(false)} />}
     </div>
   );
 };
