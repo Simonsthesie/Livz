@@ -1,79 +1,52 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { format, isValid } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import UserProfileBanner from '../components/UserProfileBanner';
 import '../styles/PhotoGalleryPage.css';
 
 const PhotoGalleryPage = () => {
   const { eventId } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [photos, setPhotos] = useState([]);
-  const [selectedPhotos, setSelectedPhotos] = useState([]);
-  const [interval, setInterval] = useState(3); // Interval in seconds
-  const [showSlideshow, setShowSlideshow] = useState(false);
-  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
-  const [selectingPhotos, setSelectingPhotos] = useState(false);
-  const [modalPhotoIndex, setModalPhotoIndex] = useState(null); // State for modal photo index
+  const [modalPhotoIndex, setModalPhotoIndex] = useState(null);
   const authToken = localStorage.getItem('authToken');
+  const [currentUser, setCurrentUser] = useState({ username: '', selfieUrl: '' });
+  const [currentThumbnailPage, setCurrentThumbnailPage] = useState(0);
+  const thumbnailsPerPage = 10;
 
   useEffect(() => {
-    const fetchPhotos = async () => {
-      try {
-        const response = await axios.get(`https://livz-backend-media.weaverize.com/media/all-media?eventId=${eventId}&favorites=false&photos=true&videos=false&page=0`, {
-          headers: {
-            'Authorization': `Bearer ${authToken}`
+    const fetchAllPhotos = async () => {
+      let allPhotos = [];
+      let page = 0;
+      let hasMorePhotos = true;
+
+      while (hasMorePhotos) {
+        try {
+          const response = await axios.get(`https://livz-backend-media.weaverize.com/media/all-media?eventId=${eventId}&favorites=false&photos=true&videos=false&page=${page}`, {
+            headers: {
+              'Authorization': `Bearer ${authToken}`
+            }
+          });
+
+          if (response.data.result && response.data.result.length > 0) {
+            allPhotos = [...allPhotos, ...response.data.result];
+            page += 1;
+          } else {
+            hasMorePhotos = false;
           }
-        });
-        setPhotos(response.data.result);
-      } catch (error) {
-        console.error('Error fetching photos', error);
+        } catch (error) {
+          console.error('Error fetching photos', error);
+          hasMorePhotos = false;
+        }
       }
+
+      setPhotos(allPhotos);
     };
 
-    fetchPhotos();
+    fetchAllPhotos();
   }, [eventId, authToken]);
-
-  const handleCheckboxChange = (photo) => {
-    if (selectedPhotos.includes(photo)) {
-      setSelectedPhotos(selectedPhotos.filter(p => p !== photo));
-    } else {
-      setSelectedPhotos([...selectedPhotos, photo]);
-    }
-  };
-
-  const startSlideshow = () => {
-    setShowSlideshow(true);
-    setCurrentPhotoIndex(0);
-  };
-
-  useEffect(() => {
-    let timer;
-    if (showSlideshow && selectedPhotos.length > 0) {
-      timer = setInterval(() => {
-        setCurrentPhotoIndex((prevIndex) => (prevIndex + 1) % selectedPhotos.length);
-      }, interval * 1000);
-    }
-    return () => clearInterval(timer);
-  }, [showSlideshow, selectedPhotos, interval]);
-
-  const closeSlideshow = () => {
-    setShowSlideshow(false);
-    setCurrentPhotoIndex(0);
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        closeSlideshow();
-        closeModal();
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -87,7 +60,7 @@ const PhotoGalleryPage = () => {
   const groupPhotosByDay = (photos) => {
     const groupedPhotos = {};
     photos.forEach(photo => {
-      const date = new Date(photo.date); // Use the date field from your photo object
+      const date = new Date(photo.date);
       if (!isValid(date)) return;
       const dateKey = format(date, 'yyyy-MM-dd');
       if (!groupedPhotos[dateKey]) {
@@ -100,9 +73,21 @@ const PhotoGalleryPage = () => {
 
   const groupedPhotos = groupPhotosByDay(photos);
 
+  const flatPhotosArray = Object.values(groupedPhotos).flat();
+
   const handlePhotoClick = (index) => {
+    const photo = flatPhotosArray[index];
     setModalPhotoIndex(index);
+    setCurrentUser({ username: photo.username, selfieUrl: photo.selfieUrl });
+    setCurrentThumbnailPage(0);  // Reset to the first page of thumbnails
   };
+
+  useEffect(() => {
+    if (modalPhotoIndex !== null) {
+      const photo = flatPhotosArray[modalPhotoIndex];
+      setCurrentUser({ username: photo.username, selfieUrl: photo.selfieUrl });
+    }
+  }, [modalPhotoIndex]);
 
   const closeModal = () => {
     setModalPhotoIndex(null);
@@ -110,17 +95,41 @@ const PhotoGalleryPage = () => {
 
   const showPrevPhoto = (e) => {
     e.stopPropagation();
-    setModalPhotoIndex((prevIndex) => (prevIndex - 1 + photos.length) % photos.length);
+    setModalPhotoIndex((prevIndex) => (prevIndex - 1 + flatPhotosArray.length) % flatPhotosArray.length);
   };
 
   const showNextPhoto = (e) => {
     e.stopPropagation();
-    setModalPhotoIndex((prevIndex) => (prevIndex + 1) % photos.length);
+    setModalPhotoIndex((prevIndex) => (prevIndex + 1) % flatPhotosArray.length);
   };
+
+  const handleThumbnailClick = (index, e) => {
+    e.stopPropagation();
+    setModalPhotoIndex(index);
+  };
+
+  const handleNextThumbnailPage = () => {
+    if ((currentThumbnailPage + 1) * thumbnailsPerPage < flatPhotosArray.length) {
+      setCurrentThumbnailPage(currentThumbnailPage + 1);
+    }
+  };
+
+  const handlePrevThumbnailPage = () => {
+    if (currentThumbnailPage > 0) {
+      setCurrentThumbnailPage(currentThumbnailPage - 1);
+    }
+  };
+
+  const displayedThumbnails = flatPhotosArray.slice(
+    currentThumbnailPage * thumbnailsPerPage,
+    (currentThumbnailPage + 1) * thumbnailsPerPage
+  );
 
   return (
     <div className="container">
-      <button className="btn btn-back" onClick={() => history.goBack()}>Back to previous page</button>
+      <button className="btn btn-back" onClick={() => navigate(-1)}>
+        <i className="fas fa-arrow-left"></i> Retour
+      </button>
       <h2>Photos de l'événement {eventId}</h2>
       <div className="photo-gallery">
         {Object.keys(groupedPhotos).map(dateKey => {
@@ -131,15 +140,8 @@ const PhotoGalleryPage = () => {
               <div className="photo-date">{formattedDate.day}</div>
               <div className="photos-row">
                 {datePhotos.map((photo, index) => (
-                  <div className="photo-container" key={photo.id} onClick={() => handlePhotoClick(index)}>
+                  <div className="photo-container" key={photo.id} onClick={() => handlePhotoClick(flatPhotosArray.indexOf(photo))}>
                     <img src={photo.thumbnail} alt={photo.originalName} className="photo" />
-                    {selectingPhotos && (
-                      <input
-                        type="checkbox"
-                        className="photo-checkbox"
-                        onChange={() => handleCheckboxChange(photo.downloadUrl)}
-                      />
-                    )}
                   </div>
                 ))}
               </div>
@@ -147,62 +149,34 @@ const PhotoGalleryPage = () => {
           );
         })}
       </div>
-      {!selectingPhotos ? (
-        <button className="btn" onClick={() => setSelectingPhotos(true)}>
-          Lancer un diaporama ?
-        </button>
-      ) : (
+      {modalPhotoIndex !== null && (
         <>
-          {selectedPhotos.length > 0 && (
-            <div className="selected-photos-preview">
-              <h3>Photos sélectionnées :</h3>
-              <div className="selected-photos">
-                {selectedPhotos.map((photo, index) => (
-                  <img key={index} src={photo} alt="Selected" className="selected-photo" />
-                ))}
-              </div>
+          <UserProfileBanner 
+            username={currentUser.username} 
+            selfieUrl={currentUser.selfieUrl} 
+          />
+          <div className="modal" onClick={closeModal}>
+            <span className="modal-close" onClick={closeModal}>&times;</span>
+            <button className="modal-prev" onClick={showPrevPhoto}>&#10094;</button>
+            <div className="modal-content-container">
+              <img className="modal-content" src={flatPhotosArray[modalPhotoIndex].downloadUrl} alt={flatPhotosArray[modalPhotoIndex].originalName} />
             </div>
-          )}
-          <div className="slideshow-controls">
-            <label htmlFor="interval">Intervalle (secondes):</label>
-            <input
-              type="number"
-              id="interval"
-              value={interval}
-              onChange={(e) => setInterval(Number(e.target.value))}
-              min="1"
-            />
-            <button className="btn" onClick={startSlideshow} disabled={selectedPhotos.length === 0}>
-              Démarrer le diaporama
-            </button>
+            <button className="modal-next" onClick={showNextPhoto}>&#10095;</button>
+            <div className="thumbnail-gallery">
+              <button className="thumbnail-nav prev" onClick={handlePrevThumbnailPage}>&#10094;</button>
+              {displayedThumbnails.map((photo, index) => (
+                <img
+                  key={index}
+                  src={photo.thumbnail}
+                  alt={photo.originalName}
+                  className={`thumbnail ${modalPhotoIndex === flatPhotosArray.indexOf(photo) ? 'active' : ''}`}
+                  onClick={(e) => handleThumbnailClick(flatPhotosArray.indexOf(photo), e)}
+                />
+              ))}
+              <button className="thumbnail-nav next" onClick={handleNextThumbnailPage}>&#10095;</button>
+            </div>
           </div>
         </>
-      )}
-      {showSlideshow && (
-        <div className="slideshow-container">
-          <img
-            src={selectedPhotos[currentPhotoIndex]}
-            alt="Slideshow"
-            className="slideshow-photo"
-          />
-          <button className="slideshow-btn prev" onClick={() => setCurrentPhotoIndex((currentPhotoIndex - 1 + selectedPhotos.length) % selectedPhotos.length)}>
-            Précédent
-          </button>
-          <button className="slideshow-btn next" onClick={() => setCurrentPhotoIndex((currentPhotoIndex + 1) % selectedPhotos.length)}>
-            Suivant
-          </button>
-          <button className="slideshow-close-btn" onClick={closeSlideshow}>
-            Fermer
-          </button>
-        </div>
-      )}
-      {modalPhotoIndex !== null && (
-        <div className="modal" onClick={closeModal}>
-          <span className="modal-close" onClick={closeModal}>&times;</span>
-          <button className="modal-prev" onClick={showPrevPhoto}>&#10094;</button>
-          <img className="modal-content" src={photos[modalPhotoIndex].downloadUrl} alt={photos[modalPhotoIndex].originalName} />
-          <button className="modal-next" onClick={showNextPhoto}>&#10095;</button>
-        </div>
       )}
     </div>
   );
