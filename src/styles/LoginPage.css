@@ -1,0 +1,26 @@
+/* Light mode */
+.bg-light {
+    background-color: #ffffff !important;
+  }
+  
+  .text-dark {
+    color: #000000 !important;
+  }
+  
+  /* Dark mode */
+  .bg-dark {
+    background-color: #000000 !important;
+  }
+  
+  .text-light {
+    color: #ffffff !important;
+  }
+  
+  .bg-dark-mode {
+    background-color: #1a1a1a !important;
+  }
+  
+  .text-light-mode {
+    color: #f8f9fa !important;
+  }
+  

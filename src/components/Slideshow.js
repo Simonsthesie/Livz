@@ -1,4 +1,3 @@
-// src/components/Slideshow.js
 import React, { useState, useEffect } from 'react';
 import '../styles/Slideshow.css';
 
@@ -52,6 +51,9 @@ const Slideshow = ({ photos, onClose }) => {
             alt="Slideshow"
             className={`slideshow-photo ${transitionClass}`}
           />
+          <div className="photo-info">
+            <p>Photo prise par : {selectedPhotos[currentPhotoIndex]?.username}</p>
+          </div>
           <button
             className="slideshow-btn prev"
             onClick={() => {
@@ -95,6 +97,7 @@ const Slideshow = ({ photos, onClose }) => {
               >
                 <img src={photo.thumbnail} alt={`photo-${index}`} className="photo" />
                 {selectedPhotos.includes(photo) && <span className="selected-label">Validé</span>}
+                <p>Photo prise par : {photo.username}</p>
               </div>
             ))}
           </div>
