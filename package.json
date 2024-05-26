@@ -30,7 +30,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "webpack": "webpack --config webpack.config.js",
-    "deploy": "gh-pages -d build"
+    "deploy": "Abdelkarim -d build"
   },
   "eslintConfig": {
     "extends": [
