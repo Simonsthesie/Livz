@@ -1,0 +1,22 @@
+/* LoginPage.css */
+
+.bg-dark-mode {
+  background-color: #343a40 !important; /* Gris foncé */
+}
+
+.text-light-mode {
+  color: #f8f9fa !important; /* Couleur de texte claire */
+}
+
+.card.bg-dark-mode {
+  background-color: #1c1e21 !important; /* Gris-noir pour la carte en mode sombre */
+}
+
+.card-header.bg-dark-mode {
+  background-color: #1c1e21 !important; /* Gris-noir pour l'en-tête de la carte en mode sombre */
+}
+
+.form-check-label i {
+  font-size: 1.5em; /* Taille des icônes */
+  color: inherit; /* Couleur héritée du mode */
+}
