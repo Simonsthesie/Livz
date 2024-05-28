@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/react-deploy/static/css/main.1985fde5.css",
-    "main.js": "/react-deploy/static/js/main.bc6b0956.js",
-    "index.html": "/react-deploy/index.html",
-    "main.1985fde5.css.map": "/react-deploy/static/css/main.1985fde5.css.map",
-    "main.bc6b0956.js.map": "/react-deploy/static/js/main.bc6b0956.js.map"
+    "main.css": "/Livz/static/css/main.1985fde5.css",
+    "main.js": "/Livz/static/js/main.0dd902df.js",
+    "index.html": "/Livz/index.html",
+    "main.1985fde5.css.map": "/Livz/static/css/main.1985fde5.css.map",
+    "main.0dd902df.js.map": "/Livz/static/js/main.0dd902df.js.map"
   },
   "entrypoints": [
     "static/css/main.1985fde5.css",
-    "static/js/main.bc6b0956.js"
+    "static/js/main.0dd902df.js"
   ]
 }
