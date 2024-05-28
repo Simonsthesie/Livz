@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/Livz/static/css/main.1985fde5.css",
-    "main.js": "/Livz/static/js/main.0dd902df.js",
-    "index.html": "/Livz/index.html",
-    "main.1985fde5.css.map": "/Livz/static/css/main.1985fde5.css.map",
-    "main.0dd902df.js.map": "/Livz/static/js/main.0dd902df.js.map"
+    "main.css": "/Livz/login/static/css/main.1985fde5.css",
+    "main.js": "/Livz/login/static/js/main.8d53ac1a.js",
+    "index.html": "/Livz/login/index.html",
+    "main.1985fde5.css.map": "/Livz/login/static/css/main.1985fde5.css.map",
+    "main.8d53ac1a.js.map": "/Livz/login/static/js/main.8d53ac1a.js.map"
   },
   "entrypoints": [
     "static/css/main.1985fde5.css",
-    "static/js/main.0dd902df.js"
+    "static/js/main.8d53ac1a.js"
   ]
 }
