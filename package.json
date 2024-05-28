@@ -1,5 +1,5 @@
 {
-  "homepage": "https://Simonsthesie.github.io/react-deploy",
+  "homepage": "https://simonsthesie.github.io/Livz",
   "name": "event-manager",
   "version": "0.1.0",
   "private": true,
@@ -40,7 +40,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "webpack": "webpack --config webpack.config.js",
-    "deploy": "gh-pages -d - build"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
